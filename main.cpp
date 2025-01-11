@@ -2,6 +2,7 @@
 #include <vector>
 #include <limits>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,8 +15,8 @@ private:
     void ingresarNumeros() {
         while (true) {
             cout << "> Ingresa un numero (o 'salir' para terminar): ";
-            cin >> input;
-            
+            getline(cin,input);// no me funcionaba de la otra manera y lo cambié
+ 
             if (input == "salir") {
                 break;
             }
@@ -39,11 +40,82 @@ public:
     }
 
     void mostrarNumeros() {
-        cout << "Numeros ingresados: { ";
+
+        cout << "\nNumeros ingresados: { ";
         for (int num : conjunto) {
             cout << num << ", ";
         }
         cout << "}" << endl;
+
+        sort(conjunto.begin(), conjunto.end());
+        cout << "Numeros ordenados: { ";
+        for (int num : conjunto) {
+            cout << num << ", ";
+        }
+        cout << "}\n" << endl;
+    }
+
+    //PARA CALCULAR LA MEDIA
+    pair<double, double> calcularMedia() {
+        if (conjunto.empty()) return {0.0, 0.0};
+        double suma = 0;
+        for (int num : conjunto) {
+            suma += num;
+        }
+        double media = suma / conjunto.size();
+        return {media, suma}; 
+    }
+
+    void mostrarMediaSuma() {
+        pair<double, double> resultado = calcularMedia(); //para la media y suma
+        double media = resultado.first; // guarda la media
+        double suma = resultado.second; // guarda la suma
+        cout << "Suma de los numeros: " << suma << endl;
+        cout << "Divisor para la media: " << conjunto.size() << endl;
+        cout << "Media: " << media << endl;
+    }
+
+    void mostrarMediana() {
+        
+        vector<int> aux = conjunto;
+        int n = aux.size();
+        int mediana = 0;
+
+        if (n % 2 == 0) { // si es par
+            mediana = (aux[(n/2)-1] + aux[n/2]) / 2; // se suman los dos numeros del medio y se dividen entre 2
+            
+        } else { // si es impar
+            mediana = aux[n/2]; // se toma el numero del medio
+        }
+
+        cout << "Mediana: " << mediana << endl;
+    }
+
+    void mostrarModa() {
+        vector<int> aux = conjunto;
+        sort(aux.begin(), aux.end());
+        int n = aux.size();
+        int moda = 0;
+        int frecuencia = 0;
+        int maxFrecuencia = 0;
+
+        for (int i = 0; i < n; i++) { // por cada numero en el vector
+            int contador = 0;
+
+            for (int j = 0; j < n; j++) { // se recorre el vector para contar las veces que se repite un numero
+                if (aux[j] == aux[i]) {
+                    contador++;
+                }
+            }
+
+            if (contador > frecuencia) { // si la frecuencia actual es mayor a la frecuencia maxima
+                frecuencia = contador;
+                moda = aux[i]; // se guarda el numero que mas se repite
+            }
+        }
+
+        cout << "Moda: " << moda << endl;
+        cout << "Se repite " << frecuencia << " veces." << endl;
     }
 };
 
@@ -51,6 +123,11 @@ int main() {
     lista conjunto;
     conjunto.llenar();
     conjunto.mostrarNumeros();
-    system("pause");
+    conjunto.mostrarMediaSuma();
+    conjunto.mostrarMediana();
+    conjunto.mostrarModa();
+    
+    cout << "Presiona Enter veces para terminar..."; //tampoco me funcionaba y lo cmabié
+    cin.ignore();
     return 0;
 }
