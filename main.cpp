@@ -59,14 +59,16 @@ public:
     pair<double, double> calcularMedia() {
         if (conjunto.empty()) return {0.0, 0.0};
         double suma = 0;
+
         for (int num : conjunto) {
             suma += num;
         }
+
         double media = suma / conjunto.size();
         return {media, suma}; 
     }
 
-    void mostrarMediaSuma() {
+    void mostrarMediaYSuma() {
         pair<double, double> resultado = calcularMedia(); //para la media y suma
         double media = resultado.first; // guarda la media
         double suma = resultado.second; // guarda la suma
@@ -123,7 +125,7 @@ int main() {
     lista conjunto;
     conjunto.llenar();
     conjunto.mostrarNumeros();
-    conjunto.mostrarMediaSuma();
+    conjunto.mostrarMediaYSuma();
     conjunto.mostrarMediana();
     conjunto.mostrarModa();
     
